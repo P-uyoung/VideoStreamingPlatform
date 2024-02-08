@@ -1,4 +1,5 @@
 const Table = require('cli-table3')
+const { v4: isCidrV4, v6: isCidrV6 } = require('is-cidr')
 const log = require('../utils/log-shim.js')
 const profile = require('npm-profile')
 
@@ -136,7 +137,7 @@ class Token extends BaseCommand {
     const readonly = conf.readOnly
 
     const password = await readUserInfo.password()
-    const validCIDR = await this.validateCIDRList(cidr)
+    const validCIDR = this.validateCIDRList(cidr)
     log.info('token', 'creating')
     const result = await pulseTillDone.withPromise(
       otplease(this.npm, conf, c => profile.createToken(password, readonly, validCIDR, c))
@@ -208,8 +209,7 @@ class Token extends BaseCommand {
     return byId
   }
 
-  async validateCIDRList (cidrs) {
-    const { v4: isCidrV4, v6: isCidrV6 } = await import('is-cidr')
+  validateCIDRList (cidrs) {
     const maybeList = [].concat(cidrs).filter(Boolean)
     const list = maybeList.length === 1 ? maybeList[0].split(/,\s*/) : maybeList
     for (const cidr of list) {

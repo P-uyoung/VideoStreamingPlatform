@@ -5,7 +5,17 @@
   "projects": {
     "youtube-clone-ui": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "standalone": false
+        },
+        "@schematics/angular:directive": {
+          "standalone": false
+        },
+        "@schematics/angular:pipe": {
+          "standalone": false
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -100,6 +110,6 @@
     }
   },
   "cli": {
-    "analytics": "baefbd06-37b3-4da3-900d-f38290ec7522"
+    "analytics": "d82b71b0-72a1-43c5-96cd-91566c52560d"
   }
 }
