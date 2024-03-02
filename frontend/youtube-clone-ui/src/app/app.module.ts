@@ -25,6 +25,9 @@ import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
 import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { VideoPlayerComponent } from './video-player/video-player.component';
+import { AuthConfigModule } from './auth/auth-config.module';
+import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 
 @NgModule({
@@ -59,11 +62,13 @@ imports: [
   VgOverlayPlayModule,
   VgBufferingModule,
   MatSnackBarModule,
+  AuthConfigModule,
 
 ],
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })
