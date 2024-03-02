@@ -28,6 +28,15 @@ import { VideoPlayerComponent } from './video-player/video-player.component';
 import { AuthConfigModule } from './auth/auth-config.module';
 import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import { HomeComponent } from './home/home.component';
+import { FeaturedComponent } from './featured/featured.component';
+import { HistoryComponent } from './history/history.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { VideoCardComponent } from './video-card/video-card.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatListModule} from "@angular/material/list";
+import {MatCardModule} from "@angular/material/card";
+import {MatMenuModule} from "@angular/material/menu";
 
 
 @NgModule({
@@ -37,6 +46,11 @@ declarations: [
   HeaderComponent,
   SaveVideoDetailsComponent,
   VideoPlayerComponent,
+  HomeComponent,
+  FeaturedComponent,
+  HistoryComponent,
+  SidebarComponent,
+  VideoCardComponent,
 ],
 imports: [
   BrowserModule,
@@ -63,6 +77,11 @@ imports: [
   VgBufferingModule,
   MatSnackBarModule,
   AuthConfigModule,
+
+  MatSidenavModule,
+  MatListModule,
+  MatCardModule,
+  MatMenuModule
 
 ],
   providers: [
