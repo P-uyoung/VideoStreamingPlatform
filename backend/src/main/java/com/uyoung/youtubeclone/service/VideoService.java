@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class VideoService {
@@ -58,8 +61,18 @@ public class VideoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find video by id - " + videoId));
     }
     public VideoDto getVideoDetails(String videoId) {
-        Video videoById = getVideoById(videoId);
+        Video video= getVideoById(videoId);
+        video.incrementViewCount();
+//        userService.addVideoToHistory(videoId);
+        videoRepository.save(video);
+        return mapToVideoDto(video);
+    }
 
+    public List<VideoDto> getAllVideos() {
+        return videoRepository.findAllByOrderByViewCountDesc().stream().map(this::mapToVideoDto).collect(Collectors.toList());
+    }
+
+    private VideoDto mapToVideoDto(Video videoById) {
         VideoDto videoDto = new VideoDto();
         videoDto.setVideoUrl(videoById.getVideoUrl());
         videoDto.setThumbnailUrl(videoById.getThumbnailUrl());
@@ -68,7 +81,9 @@ public class VideoService {
         videoDto.setDescription(videoById.getDescription());
         videoDto.setTags(videoById.getTags());
         videoDto.setVideoStatus(videoById.getVideoStatus());
-
+//        videoDto.setLikeCount(videoById.getLikes().get());
+//        videoDto.setDislikeCount(videoById.getDisLikes().get());
+//        videoDto.setViewCount(videoById.getViewCount().get());
         return videoDto;
     }
 }

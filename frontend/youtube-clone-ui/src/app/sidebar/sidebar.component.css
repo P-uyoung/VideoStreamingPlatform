@@ -1,0 +1,11 @@
+mat-list-item {
+  margin-bottom: 30px;
+  height: auto; /* 높이를 자동으로 설정하여 내용에 맞게 조정 */
+  overflow: visible; /* 컨텐츠가 요소 밖으로 나가더라도 보이도록 설정 */
+  padding: 10px 0; /* 상하 패딩을 추가 */
+}
+
+mat-icon {
+  line-height: normal; /* 아이콘의 라인 높이를 조정 */
+  /* 필요하다면 아이콘 크기를 조정하는 스타일을 추가 */
+}

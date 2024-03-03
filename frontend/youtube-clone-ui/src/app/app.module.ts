@@ -37,6 +37,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
 import {MatMenuModule} from "@angular/material/menu";
+import { VideoDetailComponent } from './video-detail/video-detail.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ declarations: [
   HistoryComponent,
   SidebarComponent,
   VideoCardComponent,
+  VideoDetailComponent,
 ],
 imports: [
   BrowserModule,
