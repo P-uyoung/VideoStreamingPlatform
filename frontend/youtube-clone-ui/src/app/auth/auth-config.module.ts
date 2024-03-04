@@ -10,7 +10,7 @@ import { isPlatformBrowser } from '@angular/common';
             postLogoutRedirectUri: isPlatformBrowser(PLATFORM_ID) ? window.location.origin : 'http://localhost:4200',
             clientId: 'rR5hmOdspC2gAOmg2FSBxNKJBcMXvzmn',
             usePushedAuthorisationRequests: false,
-            scope: 'openid profile email', // 'openid profile offline_access ' + your scopes
+            scope: 'openid profile offline_access email', // 'openid profile offline_access ' + your scopes
             responseType: 'code',
             silentRenew: true,
             useRefreshToken: true,
@@ -19,6 +19,7 @@ import { isPlatformBrowser } from '@angular/common';
             customParamsAuthRequest: {
               audience : 'http://localhost:8080',
               prompt: 'consent', // login, consent
+
             },
         }
     })],

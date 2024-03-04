@@ -56,6 +56,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>1.37</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>1.37</version> <!-- JMH 버전은 최신 버전으로 교체하세요 -->
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -67,8 +90,16 @@
                     <source>17</source>
                     <target>17</target>
                 </configuration>
-
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <argLine>-Dcloud.aws.credentials.access-key=AKIA3FLDZRAFQCRWWWWF -Dcloud.aws.credentials.secret-key=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</argLine>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

@@ -1,15 +1,21 @@
 package com.uyoung.youtubeclone.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uyoung.youtubeclone.dto.UploadVideoResponse;
 import com.uyoung.youtubeclone.dto.VideoDto;
 import com.uyoung.youtubeclone.exception.ResourceNotFoundException;
 import com.uyoung.youtubeclone.model.Video;
 import com.uyoung.youtubeclone.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +24,7 @@ public class VideoService {
 
     private final S3Service s3Service;
     private final VideoRepository videoRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public UploadVideoResponse uploadVideo(MultipartFile multipartFile) {
         String videoUrl = s3Service.uploadFile(multipartFile);
@@ -68,9 +75,40 @@ public class VideoService {
         return mapToVideoDto(video);
     }
 
-    public List<VideoDto> getAllVideos() {
+    public List<VideoDto> getAllVideos_OldVersion() {
         return videoRepository.findAllByOrderByViewCountDesc().stream().map(this::mapToVideoDto).collect(Collectors.toList());
     }
+
+    // Redis 사용
+    public List<VideoDto> getAllVideos() {
+        // Redis에서 조회
+        List<VideoDto> cachedVideos = getCachedVideos();
+        if (cachedVideos != null) {
+            return cachedVideos;
+        }
+
+        // 캐시에 없으면 데이터베이스에서 조회
+        List<VideoDto> videos = videoRepository.findAllByOrderByViewCountDesc().stream().map(this::mapToVideoDto).collect(Collectors.toList());
+
+        // 조회한 데이터를 Redis에 캐시
+        cacheVideos(videos);
+
+        return videos;
+    }
+
+    private List<VideoDto> getCachedVideos() {
+        String cacheKey = "allVideos";
+        BoundValueOperations<String, Object> cache = redisTemplate.boundValueOps(cacheKey);
+        return (List<VideoDto>) cache.get();
+    }
+
+    private void cacheVideos(List<VideoDto> videos) {
+        String cacheKey = "allVideos";
+        BoundValueOperations<String, Object> cache = redisTemplate.boundValueOps(cacheKey);
+        cache.set(videos);
+        cache.expire(Duration.ofHours(1));  // 캐시의 유효시간을 1시간으로 설정
+    }
+
 
     private VideoDto mapToVideoDto(Video videoById) {
         VideoDto videoDto = new VideoDto();
