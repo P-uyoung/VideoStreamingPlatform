@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Thread)
+@Threads(10) // 동시에 실행할 스레드 수를 10으로 설정
 public class GetAllVideosBenchmark {
 
     private VideoService videoService;
@@ -51,7 +52,7 @@ public class GetAllVideosBenchmark {
                 .include(GetAllVideosBenchmark.class.getSimpleName())
                 .forks(1)
                 .warmupIterations(5)
-                .measurementIterations(10)
+                .measurementIterations(5)
                 .build();
 
         new Runner(opt).run();
