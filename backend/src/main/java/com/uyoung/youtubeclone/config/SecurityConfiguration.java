@@ -27,6 +27,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authz -> authz
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -40,6 +41,15 @@ public class SecurityConfiguration {
                 );
         return http.build();
     }
+
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-ui/",
+            "/webjars/**",
+            "/swagger-resources/**"
+    };
 
     @Bean
     public JwtDecoder jwtDecoder() {
